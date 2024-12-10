@@ -60,3 +60,91 @@ function updateUI() {
     cells[i].innerText  = gameBoard[i];
   }
 }
+
+// Реализация условия победы 
+
+// Выигрышные комбинации 
+const winConditions = [
+  [0, 1, 2], // Верхний ряд
+  [3, 4, 5], // Средний ряд
+  [6, 7, 8], // Нижний ряд
+  [0, 3, 6], // Левый столбец
+  [1, 4, 7], // Средний столбец
+  [2, 5, 8], // Правый столбец
+  [0, 4, 8], // Диагональ слева направо
+  [2, 4, 6]  // Диагональ справа налево
+]; 
+
+
+// Проверка на победу или ничью 
+function checkForWinOrDraw() {
+  let roundWon = false;
+
+  for (let i = 0; i < winConditions.length; i++) {
+      const [a, b, c] = winConditions[i];
+      if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+          roundWon = true;
+          break;
+      }
+  }
+
+  if (roundWon) {
+      announceWinner(currentPlayer);
+      gameActive = false;
+      return;
+  }
+
+  let roundDraw = !gameBoard.includes('');
+  if (roundDraw) {
+      announceDraw();
+      gameActive = false;
+      return;
+  }
+}
+
+// В этой функции мы:
+
+// Проверяем каждое условие победы на наличие выигрышной комбинации у текущего игрока.
+// Объявляем победителя, если найдена выигрышная комбинация.
+// Проверяем на ничью, если не осталось свободных ячеек и нет победителя.
+
+function checkForWinOrDraw() {
+  let roundWon = false;
+
+  for (let i = 0; i < winConditions.length; i++) {
+      const [a, b, c] = winConditions[i];
+      if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+          roundWon = true;
+          break;
+      }
+  }
+
+  if (roundWon) {
+      announceWinner(currentPlayer);
+      gameActive = false;
+      return;
+  }
+
+  let roundDraw = !gameBoard.includes('');
+  if (roundDraw) {
+      announceDraw();
+      gameActive = false;
+      return;
+  }
+}
+
+function resetGame() {
+  gameBoard = ['', '', '', '', '', '', '', '', ''];
+  gameActive = true;
+  currentPlayer = 'X';
+  cells.forEach(cell => {
+      cell.innerText = '';
+  });
+  document.getElementById('gameMessage').innerText = '';
+}
+
+const resetButton = document.getElementById('resetButton');
+resetButton.addEventListener('click', resetGame, false);
+
+    
+
